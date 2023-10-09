@@ -2,7 +2,7 @@
 # Written in python using flask to perform API calls
 
 import importlib
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 # Grab the course data from the data.py processing script
 from data import parse_courses, number_of_courses, number_of_pages
 # moduleName = input('utils')
@@ -44,6 +44,7 @@ def json_number_of_pages():
 
 #TODO:
 
+
 # Create a route that will display information about a specific course when you get it
 
 # Create a route that will display specific information about courses in a department
@@ -55,7 +56,14 @@ def json_number_of_pages():
 # Create a route that will display all the geneds
 
 # Create a route that will display a gened of a specific category
-
+@app.route('/2021/gened_by_categories/<page_number>')
+def get_geneds_by_categories(page_number):
+   try:
+      gened_categories = request.args.get('gened_categories','').split(',')
+      course_list = parse_courses(page_number, gened_categories, '', '', 'Course Name').to_json(orient='records')
+      return course_list
+   except AttributeError:
+      return 'Bad request!', 400
 # Create a route that will filter by department + gpa
 
 # Sort all the different routes into seperate files

@@ -1,6 +1,7 @@
 # This file contains the data processing side for the CSV file, transforming it into arrays for the API
 
 import math
+import json
 import pandas as pd
 
 # course_data = pd.read_csv('courses_2021_desc.csv')
@@ -23,7 +24,7 @@ def parse_courses(page, geneds, depts, query, sort_order):
         course_list = course_data[['Course Name', 'GPA', 'Course Number', 'geneds', 'dept', 'size']]
 
         for gened in geneds:
-            course_list = course_list[course_list['geneds'].apply(lambda x: gened in x)]
+            course_list = course_list[course_list['geneds'].apply(lambda x: gened in json.loads(x.replace("'", '"')))]
 
         if query and len(query):
             course_list = course_list[course_list['Course Name'].apply(lambda x: query.lower() in x.lower())]
